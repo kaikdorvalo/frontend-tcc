@@ -6,6 +6,8 @@ import { Calendar } from './components/ui/calendar'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
+import { ConfirmDialog } from './components/dialog/confirm-dialog'
+import { toast, Toaster } from 'sonner'
 
 const api = axios.create({
   baseURL: 'http://localhost:3000'
@@ -39,6 +41,7 @@ interface DisciplineComponentProps {
 
 const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, setCreateMode }: DisciplineComponentProps) => {
   const [editMode, setEditMode] = useState(createMode || false)
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
   const [value, setValue] = useState(discipline?.name || '')
 
   function updateDiscipline() {
@@ -62,6 +65,9 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
     return api.delete(`/course-disciplines/courses/${courseId}/disciplines/${discipline?._id}`).then(() => {
       setEditMode(false)
       getAllCourses()
+      toast.success('Disciplina deletada com sucesso!')
+    }).catch(() => {
+      toast.error('Erro ao deletar a disciplina!')
     })
   }
 
@@ -69,7 +75,7 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
     <Card className='w-full'>
       <CardHeader className='flex justify-end'>
         {editMode && !createMode &&
-          <Button onClick={deleteDiscipline} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+          <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
             <Trash size={20} />
           </Button>
         }
@@ -91,6 +97,13 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
           setCreateMode?.(false)
         }} className='w-8 h-8 cursor-pointer' variant={'outline'}><X size={20} /></Button>}
 
+        <ConfirmDialog 
+          title='Deseja deletar a disciplina?' 
+          description='Esta ação é irreversível.' 
+          isOpen={confirmDeleteOpen} 
+          onConfirm={deleteDiscipline} 
+          setOpen={setConfirmDeleteOpen} 
+        />
       </CardHeader>
       <CardContent>
         <p className='mb-1 '>Nome:</p>
@@ -104,6 +117,7 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
 const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
 
   const startDate = new Date(course?.startDate || '')
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const [open, setOpen] = useState(false)
   const [date, setDate] = useState<Date | undefined>(startDate)
@@ -120,13 +134,18 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
   }
 
   function deleteCourse() {
-    return api.delete(`/course-disciplines/courses/${course._id}`).then(() => getAllCourses())
+    return api.delete(`/course-disciplines/courses/${course._id}`).then(() => {
+      getAllCourses()
+      toast.success('Curso deletado com sucesso!')
+    }).catch(() => {
+      toast.error('Erro ao deletar o curso!')
+    })
   }
 
   return <Card className='w-80'>
 
     <CardHeader className='flex justify-end'>
-      {editMode && <Button onClick={deleteCourse} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+      {editMode && <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
         <Trash size={20} />
       </Button>}
       <Button className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
@@ -139,6 +158,13 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
         {!editMode && <EditIcon size={20} />}
         {editMode && <Save size={20} />}
       </Button>
+        <ConfirmDialog 
+          title='Deseja deletar o curso?' 
+          description='Esta ação é irreversível e apagará todas as disciplinas relacionadas a este curso.' 
+          isOpen={confirmDeleteOpen} 
+          onConfirm={deleteCourse} 
+          setOpen={setConfirmDeleteOpen} 
+        />
       {editMode && <Button onClick={() => {
         setName(course?.name || '')
         setWorkload(course?.workload || 0)
@@ -213,6 +239,8 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
 
 
 function App() {
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  
   const [open, setOpen] = useState(false)
   const [date, setDate] = useState<Date | undefined>(undefined)
 
@@ -227,7 +255,10 @@ function App() {
 
   function createCourse() {
     if (name.trim() !== '' && workload && date) {
-      return api.post('/courses', { name, workload, startDate: date }).then(() => getAllCourses())
+      return api.post('/courses', { name, workload, startDate: date }).then(() => {
+        getAllCourses()
+        toast.success('Curso criado com sucesso!')
+      })
     }
   }
 
@@ -264,7 +295,16 @@ function App() {
             />
           </PopoverContent>
         </Popover>
-        <Button onClick={() => createCourse()} className='w-full cursor-pointer'>Criar curso</Button>
+        <Button onClick={() => {
+          setConfirmOpen(true)
+        }} className='w-full cursor-pointer'>Criar curso</Button>
+        <ConfirmDialog 
+          title='Criar um novo curso?' 
+          description='Ao criaru um curso, ele será mostrado na lista de cursos e ficará dispoonível para que disciplinas sejam adicionadas' 
+          isOpen={confirmOpen} 
+          onConfirm={createCourse} 
+          setOpen={setConfirmOpen} 
+        />
       </div>
 
       <div className='w-full gap-5 h-50 flex flex-wrap'>
@@ -272,6 +312,8 @@ function App() {
           <CourseComponent getAllCourses={getAllCourses} key={course._id} course={course} />
         ))}
       </div>
+
+      <Toaster />
     </div>
   )
 }
