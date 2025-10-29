@@ -272,14 +272,14 @@ function App() {
     <div className='w-full px-10 py-10 flex gap-20'>
       <div className='w-90 h-full flex flex-col gap-2 items-center'>
         <div>Criar curso</div>
-        <Input value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />
-        <Input value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
+        <Input className='input-nome-curso' value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />
+        <Input className='input-carga-horaria' value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               id="date"
-              className="w-full justify-between font-normal"
+              className="button-open-calendar w-full justify-between font-normal"
             >
               {date ? date.toLocaleDateString() : "Data de início"}
               <ChevronDownIcon />
@@ -309,7 +309,7 @@ function App() {
         />
       </div>
 
-      <div className='w-full gap-5 h-50 flex flex-wrap'>
+      <div className='div-cursos w-full gap-5 h-50 flex flex-wrap'>
         {courses.map((course) => (
           <CourseComponent getAllCourses={getAllCourses} key={course._id} course={course} />
         ))}
