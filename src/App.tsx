@@ -254,12 +254,14 @@ function App() {
   }
 
   function createCourse() {
-    if (name.trim() !== '' && workload && date) {
+    // if (name.trim() !== '' && workload && date) {
       return api.post('/courses', { name, workload, startDate: date }).then(() => {
         getAllCourses()
         toast.success('Curso criado com sucesso!')
+      }).catch(() => {
+        toast.error("Preencha os dados corretamente")
       })
-    }
+    // }
   }
 
   useEffect(() => {
