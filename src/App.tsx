@@ -72,7 +72,7 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
   }
 
   return (
-    <Card className='w-full'>
+    <Card className='w-full discipline-card'>
       <CardHeader className='flex justify-end'>
         {editMode && !createMode &&
           <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
@@ -144,7 +144,7 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
 
   return <Card className='w-80'>
 
-    <CardHeader className='flex justify-end'>
+    <CardHeader id='card-header' className='flex justify-end'>
       {editMode && <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
         <Trash size={20} />
       </Button>}
@@ -194,7 +194,7 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
               <Button
                 variant="outline"
                 id="date"
-                className="w-full justify-between font-normal"
+                className="button-open-calendar-editar w-full justify-between font-normal"
               >
                 {date ? date.toLocaleDateString() : "Data de início"}
                 <ChevronDownIcon />
@@ -221,7 +221,7 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
         ))}
 
         {!createDisciplineMode &&
-          <Button onClick={() => {
+          <Button id='btn-criar-disciplina' onClick={() => {
             setCreateDisciplineMode(true)
           }} variant={'outline'} className='rounded-full w-10 h-10 mt-4 cursor-pointer'>
             <Plus size={30} />
