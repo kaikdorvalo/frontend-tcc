@@ -75,11 +75,11 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
     <Card className='w-full discipline-card'>
       <CardHeader className='flex justify-end'>
         {editMode && !createMode &&
-          <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+          <Button data-testid="btn-delete-discipline" onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
             <Trash size={20} />
           </Button>
         }
-        <Button className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
+        <Button data-testid="btn-discipline-actions" className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
           if (editMode && !createMode) {
             updateDiscipline()
           } else if (createMode) {
@@ -107,8 +107,8 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
       </CardHeader>
       <CardContent>
         <p className='mb-1 '>Nome:</p>
-        {!editMode && <p>{discipline?.name}</p>}
-        {editMode && <Input value={value} onChange={(event) => setValue(event.target.value)} />}
+        {!editMode && <p data-testid="discipline-name">{discipline?.name}</p>}
+        {editMode && <Input data-testid="input-discipline-name" value={value} onChange={(event) => setValue(event.target.value)} />}
       </CardContent>
     </Card>
   )
@@ -145,10 +145,10 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
   return <Card className='w-80'>
 
     <CardHeader id='card-header' className='flex justify-end'>
-      {editMode && <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+      {editMode && <Button data-testid="btn-delete-course" onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
         <Trash size={20} />
       </Button>}
-      <Button className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
+      <Button data-testid="btn-save-or-edit" className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
         if (editMode) {
           updateCourse()
         } else {
@@ -175,7 +175,7 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
 
     <CardTitle className='text-center mx-10'>
       {!editMode && course?.name}
-      {editMode && <Input value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />}
+      {editMode && <Input data-testid="input-edit-course-name" value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />}
     </CardTitle>
     <CardContent>
       {!editMode &&
@@ -188,10 +188,11 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
 
       {editMode &&
         <div className='w-full flex flex-col gap-2'>
-          <Input value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
+          <Input data-testid="input-edit-course-workload" value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button
+                data-testid="btn-open-calendar-edit-course"
                 variant="outline"
                 id="date"
                 className="button-open-calendar-editar w-full justify-between font-normal"
@@ -215,13 +216,13 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
         </div>
       }
 
-      <div className='mt-10 flex flex-col gap-2 items-center'>
+      <div data-testid="discipline-list" className='mt-10 flex flex-col gap-2 items-center'>
         {course?.disciplines.map((discipline) => (
           <DiciplineComponent getAllCourses={getAllCourses} courseId={course._id} discipline={discipline} />
         ))}
 
         {!createDisciplineMode &&
-          <Button id='btn-criar-disciplina' onClick={() => {
+          <Button data-testid="btn-create-discipline" id='btn-criar-disciplina' onClick={() => {
             setCreateDisciplineMode(true)
           }} variant={'outline'} className='rounded-full w-10 h-10 mt-4 cursor-pointer'>
             <Plus size={30} />
@@ -272,12 +273,13 @@ function App() {
     <div className='w-full px-10 py-10 flex gap-20'>
       <div className='w-90 h-full flex flex-col gap-2 items-center'>
         <div>Criar curso</div>
-        <Input className='input-nome-curso' value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />
-        <Input className='input-carga-horaria' value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
+        <Input data-testid="input-course-name" className='input-nome-curso' value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />
+        <Input data-testid="input-course-workload" className='input-carga-horaria' value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
+              data-testid="button-open-calendar"
               id="date"
               className="button-open-calendar w-full justify-between font-normal"
             >
@@ -288,6 +290,7 @@ function App() {
           <PopoverContent className="w-auto overflow-hidden p-0" align="start">
             <Calendar
               mode="single"
+              data-testid="calendar-course-start-date"
               selected={date}
               captionLayout="dropdown"
               onSelect={(date) => {
@@ -297,7 +300,7 @@ function App() {
             />
           </PopoverContent>
         </Popover>
-        <Button onClick={() => {
+        <Button data-testid="button-submit" onClick={() => {
           setConfirmOpen(true)
         }} className='w-full cursor-pointer'>Criar curso</Button>
         <ConfirmDialog 
@@ -309,7 +312,7 @@ function App() {
         />
       </div>
 
-      <div className='div-cursos w-full gap-5 h-50 flex flex-wrap'>
+      <div data-testid="courses-list" className='div-cursos w-full gap-5 h-50 flex flex-wrap'>
         {courses.map((course) => (
           <CourseComponent getAllCourses={getAllCourses} key={course._id} course={course} />
         ))}

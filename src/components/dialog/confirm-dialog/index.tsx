@@ -19,8 +19,8 @@ export function ConfirmDialog({ description, isOpen, onConfirm, setOpen,title }:
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={onConfirm}>Confirmar</AlertDialogAction>
+            <AlertDialogCancel data-testid="button-cancel-alert">Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={onConfirm} data-testid="button-confirm-alert">Confirmar</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
