@@ -75,11 +75,11 @@ const DiciplineComponent = ({ discipline, courseId, getAllCourses, createMode, s
     <Card className='w-full discipline-card'>
       <CardHeader className='flex justify-end'>
         {editMode && !createMode &&
-          <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+          <Button onClick={() => setConfirmDeleteOpen(true)} className='btn-delete-discipline w-8 h-8 cursor-pointer' variant={'destructive'}>
             <Trash size={20} />
           </Button>
         }
-        <Button className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
+        <Button className='discipline-action w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
           if (editMode && !createMode) {
             updateDiscipline()
           } else if (createMode) {
@@ -145,7 +145,7 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
   return <Card className='w-80'>
 
     <CardHeader id='card-header' className='flex justify-end'>
-      {editMode && <Button onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+      {editMode && <Button onClick={() => setConfirmDeleteOpen(true)} className='btn-delete-course w-8 h-8 cursor-pointer' variant={'destructive'}>
         <Trash size={20} />
       </Button>}
       <Button className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
