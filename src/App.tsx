@@ -144,7 +144,7 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
 
   return <Card className='w-80'>
 
-    <CardHeader id='card-header' className='flex justify-end'>
+    <CardHeader id='card-header-1' className='flex justify-end'>
       {editMode && <Button data-testid="btn-delete-course" onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
         <Trash size={20} />
       </Button>}
@@ -273,15 +273,15 @@ function App() {
     <div className='w-full px-10 py-10 flex gap-20'>
       <div className='w-90 h-full flex flex-col gap-2 items-center'>
         <div>Criar curso</div>
-        <Input data-testid="input-course-name" className='input-nome-curso' value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />
-        <Input data-testid="input-course-workload" className='input-carga-horaria' value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
+        <Input data-testid="input-course-name" className='input' value={name} onChange={(event) => setName(event.target.value)} placeholder='Nome do curso' />
+        <Input data-testid="input-course-workload" className='input' value={workload} onChange={(event) => setWorkload(Math.floor(Number(event.target.value)))} type='number' placeholder='Carga horária' />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               data-testid="button-open-calendar"
               id="date"
-              className="button-open-calendar w-full justify-between font-normal"
+              className="button-calendar w-full justify-between font-normal"
             >
               {date ? date.toLocaleDateString() : "Data de início"}
               <ChevronDownIcon />
