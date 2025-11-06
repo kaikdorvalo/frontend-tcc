@@ -145,9 +145,6 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
   return <Card className='w-80'>
 
     <CardHeader id='card-header-1' className='flex justify-end'>
-      {editMode && <Button data-testid="btn-delete-course" onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
-        <Trash size={20} />
-      </Button>}
       <Button data-testid="btn-save-or-edit" className='w-8 h-8 cursor-pointer' variant={'outline'} onClick={() => {
         if (editMode) {
           updateCourse()
@@ -158,6 +155,9 @@ const CourseComponent = ({ course, getAllCourses }: CourseComponentProp) => {
         {!editMode && <EditIcon size={20} />}
         {editMode && <Save size={20} />}
       </Button>
+      {editMode && <Button data-testid="btn-delete-course" onClick={() => setConfirmDeleteOpen(true)} className='w-8 h-8 cursor-pointer' variant={'destructive'}>
+        <Trash size={20} />
+      </Button>}
         <ConfirmDialog 
           title='Deseja deletar o curso?' 
           description='Esta ação é irreversível e apagará todas as disciplinas relacionadas a este curso.' 
